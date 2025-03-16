@@ -1,0 +1,9 @@
+nicegui==2.12.1
+
+uvicorn==0.34.0
+
+bareasgi==4.4.1
+
+httpx==0.28.1
+
+httpx-ws==0.7.1
