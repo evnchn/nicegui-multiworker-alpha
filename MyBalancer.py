@@ -119,9 +119,9 @@ async def http_request_callback(request: HttpRequest) -> HttpResponse:
 
     # If all backends fail, return a 502 Bad Gateway response
     return HttpResponse(
-        status_code=502,
-        headers=[],
-        writer=text_writer("All backends are unavailable.")
+        502,
+        [],
+        text_writer("All backends are unavailable.")
     )
 
 async def websocket_callback(request: WebSocketRequest) -> None:
