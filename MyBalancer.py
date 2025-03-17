@@ -123,7 +123,7 @@ async def http_request_callback(request: HttpRequest) -> HttpResponse:
         [],
         text_writer("All backends are unavailable.")
     )
-
+INTENTIONALLY_BREAK_AFFINITY=False # CHANGE THIS TO TRUE TO BREAK AFFINITY
 async def websocket_callback(request: WebSocketRequest) -> None:
     # reading the request
     path = path_from_request(request)
@@ -136,6 +136,12 @@ async def websocket_callback(request: WebSocketRequest) -> None:
 
     if session:
         backend_port = websocket_affinity.get(session)
+
+        if INTENTIONALLY_BREAK_AFFINITY:
+            sorted_backends = sorted(backends, key=lambda port: (failed_requests[port], request_counts[port]))
+            # remove the affinity in the sorted_backends
+            sorted_backends.remove(backend_port)
+            backend_port = sorted_backends[0]
         if not backend_port: # this generally ends in disaster, though...
             sorted_backends = sorted(backends, key=lambda port: (failed_requests[port], request_counts[port]))
             backend_port = sorted_backends[0]
